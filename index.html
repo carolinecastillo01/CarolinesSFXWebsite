@@ -1,212 +1,142 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="cupcake">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-      /* Make the timeline sticky to the right */
-      .timeline {
-        position: sticky;
-        top: 100px;
-        right: 0;
-        width: 150px;
-        list-style: none;
-        padding: 0;
-      }
-
-      .timeline-item {
-        margin: 10px 0;
-        padding: 10px;
-        border-left: 4px solid transparent;
-        cursor: pointer;
-      }
-
-      .active {
-        border-left-color: #3498db;
-        font-weight: bold;
-        background-color: rgba(52, 152, 219, 0.1);
-      }
-
-      .section {
-        margin-top: 50px;
-        padding: 100px 0;
-      }
-    </style>
+    <title>Document</title>
   </head>
-
   <body>
-    <div class="navbar shadow-sm mt-1 mb-1 px-4 py-3">
-      <!-- Carolines Face in Navbar with dropdown -->
-      <div tabindex="0" class="btn btn-ghost btn-circle avatar">
-        <div class="w-20 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="static/img/caroline.webp" />
-        </div>
-      </div>
-
-      <!-- Carolines Name in Navbar -->
-      <div class="flex-1">
-        <a class="btn btn-ghost text-xl">Caroline Castillo</a>
-      </div>
-
-      <div class="flex-none">
-        <!-- Search in navbar -->
-        <div class="flex-none gap-2">
-          <div class="form-control">
-            <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
-          </div>
-        </div>
-
-        <!-- Dropdown Menu -->
-        <div class="dropdown dropdown-end mx-2">
-          <button class="btn btn-square btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-5 w-5 stroke-current">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    <nav class="navbar bg-base-100 py-3">
+      <!-- Left Side of Navbar -->
+      <div class="navbar-start">
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
             </svg>
-          </button>
+          </div>
           <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li>
-              <a class="justify-between">
-                Profile
-                <span class="badge">New</span>
-              </a>
-            </li>
-            <li><a>Settings</a></li>
-            <li><a>Logout</a></li>
+            <li><a>Homepage</a></li>
+            <li><a>Portfolio</a></li>
+            <li><a>About</a></li>
           </ul>
         </div>
       </div>
-    </div>
 
-    <div class="hero min-h-screen" style="background-image: url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)">
-      <div class="hero-overlay bg-opacity-60"></div>
-      <div class="hero-content text-neutral-content text-center">
-        <div class="max-w-md">
-          <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
-          <p class="mb-5">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-          <button class="btn btn-primary">Get Started</button>
+      <!-- Center of Navbar -->
+      <div class="navbar-center gap-2">
+        <!-- Carolines Face in Navbar with dropdown -->
+        <div tabindex="0" class="btn btn-ghost btn-circle avatar">
+          <div class="w-20 rounded-full">
+            <img alt="Tailwind CSS Navbar component" src="static/img/caroline.webp" />
+          </div>
+        </div>
+
+        <!-- Carolines Name in Navbar -->
+        <div class="flex-1">
+          <a class="btn btn-ghost text-xl">Caroline Castillo</a>
         </div>
       </div>
-    </div>
 
-    <div class="container mx-auto mt-4 h">
-      <button class="btn">Hello daisyUI</button>
-      <a href="https://cbcgirl1.wixsite.com/my-site-1/bio" class="btn btn-link">OLD</a>
-    </div>
+      <!-- Right Side of Navbar -->
+      <div class="navbar-end">
+        <button class="btn btn-ghost btn-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+        <button class="btn btn-ghost btn-circle">
+          <div class="indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span class="badge badge-xs badge-primary indicator-item"></span>
+          </div>
+        </button>
+      </div>
+    </nav>
 
-    <div style="display: flex">
-      <!-- Main content sections -->
-      <div class="container mx-auto mt-4">
-        <section id="section1" class="section bg-base-200">
-          <div class="carousel carousel-center rounded-box">
-            <div class="carousel-item">
-              <div class="card bg-base-100 shadow-xl">
-                <figure>
-                  <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" alt="Shoes" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">
-                    Shoes!
-                    <div class="badge badge-secondary">NEW</div>
-                  </h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions justify-end">
-                    <div class="badge badge-outline">Fashion</div>
-                    <div class="badge badge-outline">Products</div>
-                  </div>
-                </div>
+    <!-- Hero Section -->
+    <section class="hero min-h-screen bg-base-200">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <img src="static/img/caroline-profile.webp" class="max-w-sm rounded-lg shadow-2xl" alt="Caroline Castillo Profile" />
+        <div>
+          <h1 class="text-5xl font-bold">Hi, I'm Caroline Castillo</h1>
+          <p class="py-6">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem cumque velit voluptates, quas qui delectus ex reiciendis in minima expedita quia quam accusantium? Reiciendis ipsum
+            cupiditate voluptatum, aperiam voluptas tempora dolorum placeat consectetur labore vel, quam maxime praesentium voluptates ducimus totam! Quam recusandae exercitationem, voluptate ea sint
+            suscipit eaque mollitia?
+          </p>
+          <a href="#contact" class="btn btn-primary">Get In Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-16 bg-base-100">
+      <div class="text-center">
+        <h2 class="text-4xl font-bold mb-8">About Me</h2>
+        <p class="text-lg max-w-prose mx-auto">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nobis ab animi quas nemo obcaecati ipsam libero odio voluptates, mollitia dignissimos aperiam. Culpa quam eum sequi sit
+          illo itaque debitis.
+        </p>
+      </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="py-16 bg-base-200">
+      <div class="text-center">
+        <h2 class="text-4xl font-bold mb-8">Portfolio</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Add your portfolio items here -->
+          <div class="card bg-base-100 shadow-xl">
+            <figure><img src="static/img/project1.webp" alt="Project 1" /></figure>
+            <div class="card-body">
+              <h2 class="card-title">Project Title</h2>
+              <p>A brief description of the project. Showcase your work here!</p>
+              <div class="card-actions justify-end">
+                <a href="#" class="btn btn-primary">View Project</a>
               </div>
             </div>
-            <div class="carousel-item">
-              <img src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp" alt="Pizza" />
-            </div>
-            <div class="carousel-item">
-              <img src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.webp" alt="Pizza" />
-            </div>
-            <div class="carousel-item">
-              <img src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.webp" alt="Pizza" />
-            </div>
-            <div class="carousel-item">
-              <img src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.webp" alt="Pizza" />
-            </div>
-            <div class="carousel-item">
-              <img src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.webp" alt="Pizza" />
-            </div>
-            <div class="carousel-item">
-              <img src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.webp" alt="Pizza" />
-            </div>
           </div>
-        </section>
-
-        <section id="section2" class="section bg-base-100">
-          <h2 class="text-3xl">iMac</h2>
-          <p>Some interesting content here...</p>
-        </section>
-
-        <section id="section3" class="section bg-base-200">
-          <h2 class="text-3xl">iPod</h2>
-          <p>Some interesting content here...</p>
-        </section>
-
-        <section id="section4" class="section bg-base-100">
-          <h2 class="text-3xl">iPhone</h2>
-          <p>Some interesting content here...</p>
-        </section>
-
-        <section id="section5" class="section bg-base-200">
-          <h2 class="text-3xl">Apple Watch</h2>
-          <p>Some interesting content here...</p>
-        </section>
+          <!-- More portfolio items -->
+        </div>
       </div>
+    </section>
 
-      <!-- Sticky Timeline on the right side only when inside this content not on the whole page -->
-      <div style="position: relative; width: 200px">
-        <ul class="timeline">
-          <li class="timeline-item" data-target="#section1">First Macintosh</li>
-          <li class="timeline-item" data-target="#section2">iMac</li>
-          <li class="timeline-item" data-target="#section3">iPod</li>
-          <li class="timeline-item" data-target="#section4">iPhone</li>
-          <li class="timeline-item" data-target="#section5">Apple Watch</li>
-        </ul>
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-base-100">
+      <div class="text-center">
+        <h2 class="text-4xl font-bold mb-8">Contact Me</h2>
+        <form class="max-w-lg mx-auto">
+          <div class="form-control mb-4">
+            <label class="label" for="name">
+              <span class="label-text">Name</span>
+            </label>
+            <input type="text" id="name" placeholder="Your Name" class="input input-bordered" />
+          </div>
+          <div class="form-control mb-4">
+            <label class="label" for="email">
+              <span class="label-text">Email</span>
+            </label>
+            <input type="email" id="email" placeholder="Your Email" class="input input-bordered" />
+          </div>
+          <div class="form-control mb-4">
+            <label class="label" for="message">
+              <span class="label-text">Message</span>
+            </label>
+            <textarea id="message" placeholder="Your Message" class="textarea textarea-bordered"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+        </form>
       </div>
-    </div>
-
-    <script>
-      // IntersectionObserver to activate timeline items on scroll
-      const sections = document.querySelectorAll(".section");
-      const timelineItems = document.querySelectorAll(".timeline-item");
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const id = entry.target.getAttribute("id");
-            const timelineItem = document.querySelector(`.timeline-item[data-target="#${id}"]`);
-
-            if (entry.isIntersecting) {
-              timelineItems.forEach((item) => item.classList.remove("active"));
-              timelineItem.classList.add("active");
-            }
-          });
-        },
-        {
-          threshold: 0.6, // Adjust this value for when the section is considered 'active'
-        }
-      );
-
-      sections.forEach((section) => observer.observe(section));
-
-      // Scroll to section when timeline item is clicked
-      timelineItems.forEach((item) => {
-        item.addEventListener("click", (e) => {
-          const targetSection = document.querySelector(item.getAttribute("data-target"));
-          window.scrollTo({
-            top: targetSection.offsetTop - 50, // Adjust offset to align properly
-            behavior: "smooth",
-          });
-        });
-      });
-    </script>
+    </section>
   </body>
 </html>

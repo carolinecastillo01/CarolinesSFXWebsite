@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Document</title>
+    <title>Portfolio</title>
   </head>
   <body>
     <nav class="navbar bg-base-100 py-3">
@@ -27,21 +27,18 @@
 
       <!-- Center of Navbar -->
       <div class="navbar-center gap-2">
-        <!-- Carolines Face in Navbar with dropdown -->
         <div tabindex="0" class="btn btn-ghost btn-circle avatar">
           <div class="w-20 rounded-full">
             <img alt="Tailwind CSS Navbar component" src="static/img/caroline.webp" />
           </div>
         </div>
-
-        <!-- Carolines Name in Navbar -->
         <div class="flex-1">
           <a class="btn btn-ghost text-xl">Caroline Castillo</a>
         </div>
       </div>
 
       <!-- Right Side of Navbar -->
-      <div class="navbar-end">
+      <div class="navbar-end invisible lg:visible">
         <button class="btn btn-ghost btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -65,15 +62,11 @@
 
     <!-- Hero Section -->
     <section class="hero min-h-screen bg-base-200">
-      <div class="hero-content flex-col lg:flex-row-reverse">
-        <img src="static/img/caroline-profile.webp" class="max-w-sm rounded-lg shadow-2xl" alt="Caroline Castillo Profile" />
+      <div class="hero-content gap-12 flex-col lg:flex-row">
+        <img src="static/img/caroline.webp" class="max-w-lg rounded-lg shadow-2xl" alt="Caroline Castillo Profile" />
         <div>
           <h1 class="text-5xl font-bold">Hi, I'm Caroline Castillo</h1>
-          <p class="py-6">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem cumque velit voluptates, quas qui delectus ex reiciendis in minima expedita quia quam accusantium? Reiciendis ipsum
-            cupiditate voluptatum, aperiam voluptas tempora dolorum placeat consectetur labore vel, quam maxime praesentium voluptates ducimus totam! Quam recusandae exercitationem, voluptate ea sint
-            suscipit eaque mollitia?
-          </p>
+          <p class="py-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem cumque velit voluptates, quas qui delectus ex reiciendis in minima expedita quia quam accusantium?</p>
           <a href="#contact" class="btn btn-primary">Get In Touch</a>
         </div>
       </div>
@@ -90,23 +83,84 @@
       </div>
     </section>
 
-    <!-- Portfolio Section -->
+    <!-- Portfolio Section with Carousel -->
     <section class="py-16 bg-base-200">
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-8">Portfolio</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Add your portfolio items here -->
-          <div class="card bg-base-100 shadow-xl">
-            <figure><img src="static/img/project1.webp" alt="Project 1" /></figure>
-            <div class="card-body">
-              <h2 class="card-title">Project Title</h2>
-              <p>A brief description of the project. Showcase your work here!</p>
-              <div class="card-actions justify-end">
-                <a href="#" class="btn btn-primary">View Project</a>
+        <div class="carousel carousel-center rounded-box p-4 space-x-4 w-5/6 m-auto">
+          <!-- Carousel Item 1 -->
+          <div class="carousel-item">
+            <div class="card w-96 bg-base-100 shadow-xl">
+              <figure><img src="https://via.placeholder.com/400" alt="Project 1" class="w-full h-64 object-cover" /></figure>
+              <div class="card-body">
+                <h2 class="card-title">
+                  Project 1
+                  <div class="badge badge-secondary">NEW</div>
+                </h2>
+                <p>A brief description of the project. Highlighting features and technology used.</p>
+                <div class="card-actions justify-end">
+                  <div class="badge badge-outline">HTML</div>
+                  <div class="badge badge-outline">CSS</div>
+                  <div class="badge badge-outline">JavaScript</div>
+                </div>
               </div>
             </div>
           </div>
-          <!-- More portfolio items -->
+          <!-- Carousel Item 2 -->
+          <div class="carousel-item">
+            <div class="card w-96 bg-base-100 shadow-xl">
+              <figure><img src="https://via.placeholder.com/400" alt="Project 2" class="w-full h-64 object-cover" /></figure>
+              <div class="card-body">
+                <h2 class="card-title">
+                  Project 2
+                  <div class="badge badge-secondary">NEW</div>
+                </h2>
+                <p>Backend development focused. Technologies include Node.js, Express, and MongoDB.</p>
+                <div class="card-actions justify-end">
+                  <div class="badge badge-outline">Node.js</div>
+                  <div class="badge badge-outline">Express</div>
+                  <div class="badge badge-outline">MongoDB</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Carousel Item 3 -->
+          <div class="carousel-item">
+            <div class="card w-96 bg-base-100 shadow-xl">
+              <figure><img src="https://via.placeholder.com/400" alt="Project 3" class="w-full h-64 object-cover" /></figure>
+              <div class="card-body">
+                <h2 class="card-title">
+                  Project 3
+                  <div class="badge badge-secondary">NEW</div>
+                </h2>
+                <p>A front-end focused project using modern technologies like React.</p>
+                <div class="card-actions justify-end">
+                  <div class="badge badge-outline">React</div>
+                  <div class="badge badge-outline">Tailwind CSS</div>
+                  <div class="badge badge-outline">API Integration</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carousel Item 3 -->
+          <div class="carousel-item">
+            <div class="card w-96 bg-base-100 shadow-xl">
+              <figure><img src="https://via.placeholder.com/400" alt="Project 3" class="w-full h-64 object-cover" /></figure>
+              <div class="card-body">
+                <h2 class="card-title">
+                  Project 3
+                  <div class="badge badge-secondary">NEW</div>
+                </h2>
+                <p>A front-end focused project using modern technologies like React.</p>
+                <div class="card-actions justify-end">
+                  <div class="badge badge-outline">React</div>
+                  <div class="badge badge-outline">Tailwind CSS</div>
+                  <div class="badge badge-outline">API Integration</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

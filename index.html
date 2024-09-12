@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
     <title>Portfolio</title>
   </head>
   <body>
@@ -26,19 +27,19 @@
       </div>
 
       <!-- Center of Navbar -->
-      <div class="navbar-center gap-2">
+      <div class="lg:navbar-center navbar-end gap-2 justify-center">
         <div tabindex="0" class="btn btn-ghost btn-circle avatar">
           <div class="w-20 rounded-full">
             <img alt="Tailwind CSS Navbar component" src="static/img/caroline.webp" />
           </div>
         </div>
-        <div class="flex-1">
-          <a class="btn btn-ghost text-xl">Caroline Castillo</a>
+        <div class="flex">
+          <a class="btn btn-ghost lg:text-xl text:sm">Caroline Castillo</a>
         </div>
       </div>
 
       <!-- Right Side of Navbar -->
-      <div class="navbar-end invisible lg:visible">
+      <div class="navbar-end hidden lg:flex">
         <button class="btn btn-ghost btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -61,13 +62,16 @@
     </nav>
 
     <!-- Hero Section -->
+    <!-- Hero Section -->
     <section class="hero min-h-screen bg-base-200">
-      <div class="hero-content gap-12 flex-col lg:flex-row">
-        <img src="static/img/caroline.webp" class="max-w-lg rounded-lg shadow-2xl" alt="Caroline Castillo Profile" />
+      <div class="hero-content gap-4 md:gap-12 flex flex-col lg:flex-row items-center text-center lg:text-left">
+        <img src="static/img/caroline.webp" class="md:size-9/12 lg:max-w-lg rounded-lg shadow-2xl" alt="Caroline Castillo Profile" />
         <div>
-          <h1 class="text-5xl font-bold">Hi, I'm Caroline Castillo</h1>
-          <p class="py-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem cumque velit voluptates, quas qui delectus ex reiciendis in minima expedita quia quam accusantium?</p>
-          <a href="#contact" class="btn btn-primary">Get In Touch</a>
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold">Hi, I'm Caroline Castillo</h1>
+          <p class="py-4 md:py-6 text-lg">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem cumque velit voluptates, quas qui delectus ex reiciendis in minima expedita quia quam accusantium?
+          </p>
+          <a href="#contact" class="btn btn-primary mt-4">Get In Touch</a>
         </div>
       </div>
     </section>
@@ -87,9 +91,9 @@
     <section class="py-16 bg-base-200">
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-8">Portfolio</h2>
-        <div class="carousel carousel-center rounded-box p-4 space-x-4 w-5/6 m-auto">
+        <div class="carousel carousel-center p-4 space-x-4 w-5/6 m-auto border-x-2 rounded border-slate-700">
           <!-- Carousel Item 1 -->
-          <div class="carousel-item">
+          <div class="carousel-item cursor-pointer">
             <div class="card w-96 bg-base-100 shadow-xl">
               <figure><img src="https://via.placeholder.com/400" alt="Project 1" class="w-full h-64 object-cover" /></figure>
               <div class="card-body">

@@ -3,198 +3,271 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
-    <title>Portfolio</title>
+    <script>
+      // Configure Tailwind to enable dark mode via class
+      tailwind.config = {
+        darkMode: "class", // This ensures Tailwind respects dark mode classes
+      };
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <title>Document</title>
+
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
   </head>
   <body>
-    <nav class="navbar bg-base-100 py-3">
-      <!-- Left Side of Navbar -->
-      <div class="navbar-start">
-        <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-          </div>
-          <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li><a>Homepage</a></li>
-            <li><a>Portfolio</a></li>
-            <li><a>About</a></li>
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700 z-50">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+          <img class="w-10 h-10 rounded-full" src="static/img/caroline.webp" alt="Rounded avatar" />
+          <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Caroline Castillo</span>
+        </a>
+        <button
+          data-collapse-toggle="navbar-dropdown"
+          type="button"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          aria-controls="navbar-dropdown"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+          </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+          <ul
+            class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:items-center md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+          >
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
+                aria-current="page"
+                >Home</a
+              >
+            </li>
+            <li>
+              <button
+                id="dropdownNavbarLink"
+                data-dropdown-toggle="dropdownNavbar"
+                class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+              >
+                Dropdown
+                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                </svg>
+              </button>
+              <!-- Dropdown menu -->
+              <div id="dropdownNavbar" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                </div>
+              </div>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Services</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Pricing</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <!-- Toggle Theme -->
+              <button
+                id="theme-toggle"
+                type="button"
+                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+              >
+                <!-- Dark icon (moon) -->
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+
+                <!-- Light icon (sun) -->
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </li>
           </ul>
         </div>
       </div>
-
-      <!-- Center of Navbar -->
-      <div class="lg:navbar-center navbar-end gap-2 justify-center">
-        <div tabindex="0" class="btn btn-ghost btn-circle avatar">
-          <div class="w-20 rounded-full">
-            <img alt="Tailwind CSS Navbar component" src="static/img/caroline.webp" />
-          </div>
-        </div>
-        <div class="flex">
-          <a class="btn btn-ghost lg:text-xl text:sm">Caroline Castillo</a>
-        </div>
-      </div>
-
-      <!-- Right Side of Navbar -->
-      <div class="navbar-end hidden lg:flex">
-        <button class="btn btn-ghost btn-circle">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-        <button class="btn btn-ghost btn-circle">
-          <div class="indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <span class="badge badge-xs badge-primary indicator-item"></span>
-          </div>
-        </button>
-      </div>
     </nav>
 
-    <!-- Hero Section -->
-    <!-- Hero Section -->
-    <section class="hero min-h-screen bg-base-200">
-      <div class="hero-content gap-4 md:gap-12 flex flex-col lg:flex-row items-center text-center lg:text-left">
-        <img src="static/img/caroline.webp" class="md:size-9/12 lg:max-w-lg rounded-lg shadow-2xl" alt="Caroline Castillo Profile" />
-        <div>
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold">Hi, I'm Caroline Castillo</h1>
-          <p class="py-4 md:py-6 text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem cumque velit voluptates, quas qui delectus ex reiciendis in minima expedita quia quam accusantium?
-          </p>
-          <a href="#contact" class="btn btn-primary mt-4">Get In Touch</a>
-        </div>
-      </div>
-    </section>
+    <!-- JUMBO title section -->
 
-    <!-- About Section -->
-    <section class="py-16 bg-base-100">
-      <div class="text-center">
-        <h2 class="text-4xl font-bold mb-8">About Me</h2>
-        <p class="text-lg max-w-prose mx-auto">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nobis ab animi quas nemo obcaecati ipsam libero odio voluptates, mollitia dignissimos aperiam. Culpa quam eum sequi sit
-          illo itaque debitis.
+    <section class="bg-white dark:bg-gray-900">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Your next SFX Artist</h1>
+        <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam corrupti ex asperiores ducimus sunt non beatae ad dolore adipisci enim!
         </p>
-      </div>
-    </section>
-
-    <!-- Portfolio Section with Carousel -->
-    <section class="py-16 bg-base-200">
-      <div class="text-center">
-        <h2 class="text-4xl font-bold mb-8">Portfolio</h2>
-        <div class="carousel carousel-center p-4 space-x-4 w-100 m-auto">
-          <!-- Carousel Item 1 -->
-          <div class="carousel-item cursor-pointer">
-            <div class="card w-96 bg-base-100 shadow-xl">
-              <figure><img src="https://via.placeholder.com/400" alt="Project 1" class="w-full h-64 object-cover" /></figure>
-              <div class="card-body">
-                <h2 class="card-title">
-                  Project 1
-                  <div class="badge badge-secondary">NEW</div>
-                </h2>
-                <p>A brief description of the project. Highlighting features and technology used.</p>
-                <div class="card-actions justify-end">
-                  <div class="badge badge-outline">HTML</div>
-                  <div class="badge badge-outline">CSS</div>
-                  <div class="badge badge-outline">JavaScript</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Carousel Item 2 -->
-          <div class="carousel-item">
-            <div class="card w-96 bg-base-100 shadow-xl">
-              <figure><img src="https://via.placeholder.com/400" alt="Project 2" class="w-full h-64 object-cover" /></figure>
-              <div class="card-body">
-                <h2 class="card-title">
-                  Project 2
-                  <div class="badge badge-secondary">NEW</div>
-                </h2>
-                <p>Backend development focused. Technologies include Node.js, Express, and MongoDB.</p>
-                <div class="card-actions justify-end">
-                  <div class="badge badge-outline">Node.js</div>
-                  <div class="badge badge-outline">Express</div>
-                  <div class="badge badge-outline">MongoDB</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Carousel Item 3 -->
-          <div class="carousel-item">
-            <div class="card w-96 bg-base-100 shadow-xl">
-              <figure><img src="https://via.placeholder.com/400" alt="Project 3" class="w-full h-64 object-cover" /></figure>
-              <div class="card-body">
-                <h2 class="card-title">
-                  Project 3
-                  <div class="badge badge-secondary">NEW</div>
-                </h2>
-                <p>A front-end focused project using modern technologies like React.</p>
-                <div class="card-actions justify-end">
-                  <div class="badge badge-outline">React</div>
-                  <div class="badge badge-outline">Tailwind CSS</div>
-                  <div class="badge badge-outline">API Integration</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Carousel Item 3 -->
-          <div class="carousel-item">
-            <div class="card w-96 bg-base-100 shadow-xl">
-              <figure><img src="https://via.placeholder.com/400" alt="Project 3" class="w-full h-64 object-cover" /></figure>
-              <div class="card-body">
-                <h2 class="card-title">
-                  Project 3
-                  <div class="badge badge-secondary">NEW</div>
-                </h2>
-                <p>A front-end focused project using modern technologies like React.</p>
-                <div class="card-actions justify-end">
-                  <div class="badge badge-outline">React</div>
-                  <div class="badge badge-outline">Tailwind CSS</div>
-                  <div class="badge badge-outline">API Integration</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+          <a
+            href="#"
+            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          >
+            Get started
+            <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+            </svg>
+          </a>
+          <a
+            href="#"
+            class="py-3 px-5 sm:ms-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-70"
+          >
+            Learn more
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 bg-base-100">
-      <div class="text-center">
-        <h2 class="text-4xl font-bold mb-8">Contact Me</h2>
-        <form class="max-w-lg mx-auto">
-          <div class="form-control mb-4">
-            <label class="label" for="name">
-              <span class="label-text">Name</span>
-            </label>
-            <input type="text" id="name" placeholder="Your Name" class="input input-bordered" />
-          </div>
-          <div class="form-control mb-4">
-            <label class="label" for="email">
-              <span class="label-text">Email</span>
-            </label>
-            <input type="email" id="email" placeholder="Your Email" class="input input-bordered" />
-          </div>
-          <div class="form-control mb-4">
-            <label class="label" for="message">
-              <span class="label-text">Message</span>
-            </label>
-            <textarea id="message" placeholder="Your Message" class="textarea textarea-bordered"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Send Message</button>
-        </form>
+    <!-- Images Carousel -->
+
+    <div class="bg-white dark:bg-gray-900">
+      <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
+        <button
+          type="button"
+          class="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
+        >
+          All categories
+        </button>
+        <button
+          type="button"
+          class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+        >
+          Shoes
+        </button>
+        <button
+          type="button"
+          class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+        >
+          Bags
+        </button>
+        <button
+          type="button"
+          class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+        >
+          Electronics
+        </button>
       </div>
-    </section>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-8 md:px-16">
+        <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+          <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+        </a>
+        <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+          <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+        </a>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg" alt="" />
+        </div>
+        <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
+      var themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
+
+      // Change the icons inside the button based on previous settings
+      if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        themeToggleLightIcon.classList.remove("hidden");
+      } else {
+        themeToggleDarkIcon.classList.remove("hidden");
+      }
+
+      var themeToggleBtn = document.getElementById("theme-toggle");
+
+      themeToggleBtn.addEventListener("click", function () {
+        // toggle icons inside button
+        themeToggleDarkIcon.classList.toggle("hidden");
+        themeToggleLightIcon.classList.toggle("hidden");
+
+        // if set via local storage previously
+        if (localStorage.getItem("color-theme")) {
+          if (localStorage.getItem("color-theme") === "light") {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
+          }
+        } else {
+          // if NOT set via local storage previously
+          if (document.documentElement.classList.contains("dark")) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
+          } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
+          }
+        }
+      });
+    </script>
   </body>
 </html>

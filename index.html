@@ -12,7 +12,13 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-    <title>Document</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <title>Caroline Castillo</title>
 
     <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -28,7 +34,7 @@
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
           <img class="w-10 h-10 rounded-full" src="static/img/caroline.webp" alt="Rounded avatar" />
-          <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Caroline Castillo</span>
+          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Caroline Castillo</span>
         </a>
         <button
           data-collapse-toggle="navbar-dropdown"
@@ -42,7 +48,7 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
           </svg>
         </button>
-        <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+        <div class="hidden w-full md:block md:w-auto" id="navbar-drop">
           <ul
             class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:items-center md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
           >
@@ -127,7 +133,9 @@
     <!-- JUMBO title section -->
 
     <section class="bg-white dark:bg-gray-900">
+      <!-- <canvas width="630"></canvas> -->
       <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+        <div id="3d" class="py-4 text-4xl text-center font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Caroline Castilo</div>
         <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Your next SFX Artist</h1>
         <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam corrupti ex asperiores ducimus sunt non beatae ad dolore adipisci enim!
@@ -135,7 +143,7 @@
         <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
           <a
             href="#"
-            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 transition-all duration-300 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
           >
             Get started
             <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -155,7 +163,7 @@
     <!-- Scroll Percent -->
     <!-- Scroll Percentage Bar -->
     <div class="sticky top-0 z-50 w-full bg-gray-200 h-2 dark:bg-gray-700">
-      <div id="scroll-bar" class="h-full bg-indigo-600 rounded-full" style="width: 0%"></div>
+      <div id="scroll-bar" class="h-full bg-indigo-600 rounded-full transition-width duration-200" style="width: 0%"></div>
     </div>
 
     <!-- Images Carousel -->
@@ -311,6 +319,35 @@
       </div>
     </div>
 
+    <div class="bg-white dark:bg-gray-900">
+      <footer class="bg-white rounded-lg shadow dark:bg-gray-900">
+        <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+          <div class="sm:flex sm:items-center sm:justify-between">
+            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+              <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+              <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Caroline Castillo</span>
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+              <li>
+                <a href="#" class="hover:underline me-4 md:me-6">About</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+          <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="#" class="hover:underline">Caroline Castillo™</a>. All Rights Reserved.</span>
+        </div>
+      </footer>
+    </div>
+
     <!-- Update percentage scoll bar -->
     <script>
       window.addEventListener("scroll", () => {
@@ -319,6 +356,19 @@
         const scrollPosition = window.scrollY;
         const scrollPercentage = (scrollPosition / totalScroll) * 100;
         scrollBar.style.width = scrollPercentage + "%";
+      });
+    </script>
+
+    <script>
+      jQuery(document).ready(function () {
+        $("#3d").mousemove(function (e) {
+          var rXP = e.pageX - this.offsetLeft - $(this).width() / 2;
+          var rYP = e.pageY - this.offsetTop - $(this).height() / 2;
+          $("#3d").css(
+            "text-shadow",
+            +rYP / 10 + "px " + rXP / 80 + "px rgba(227,6,19,.8), " + rYP / 8 + "px " + rXP / 60 + "px rgba(255,237,0,1), " + rXP / 70 + "px " + rYP / 12 + "px rgba(0,159,227,.7)"
+          );
+        });
       });
     </script>
 
@@ -361,6 +411,49 @@
           }
         }
       });
+    </script>
+
+    <script>
+      var ctx = document.querySelector("canvas").getContext("2d"),
+        dashLen = 150,
+        dashOffset = dashLen,
+        speed = 6,
+        txt = "Caroline Castillo",
+        x = 30,
+        i = 0;
+
+      ctx.font = "50px Comic Sans MS, cursive, TSCu_Comic, sans-serif";
+      ctx.lineWidth = 5;
+      ctx.lineJoin = "round";
+      ctx.globalAlpha = 2 / 3;
+
+      // if set via local storage previously
+      if (localStorage.getItem("color-theme")) {
+        if (localStorage.getItem("color-theme") === "light") {
+          ctx.strokeStyle = "#1f2f90";
+          ctx.fillStyle = "#1f2f90";
+        } else {
+          ctx.strokeStyle = "#d3e0f5";
+          ctx.fillStyle = "#d3e0f5";
+        }
+      }
+
+      (function loop() {
+        ctx.clearRect(x, 0, 60, 150);
+        ctx.setLineDash([dashLen - dashOffset, dashOffset - speed]); // create a long dash mask
+        dashOffset -= speed; // reduce dash length
+        ctx.strokeText(txt[i], x, 90); // stroke letter
+
+        if (dashOffset > 0) requestAnimationFrame(loop); // animate
+        else {
+          ctx.fillText(txt[i], x, 90); // fill final letter
+          dashOffset = dashLen; // prep next char
+          x += ctx.measureText(txt[i++]).width + ctx.lineWidth * Math.random();
+          ctx.setTransform(1, 0, 0, 1, 0, 3 * Math.random()); // random y-delta
+          ctx.rotate(Math.random() * 0.005); // random rotation
+          if (i < txt.length) requestAnimationFrame(loop);
+        }
+      })();
     </script>
   </body>
 </html>

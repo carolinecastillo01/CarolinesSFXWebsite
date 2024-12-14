@@ -104,6 +104,13 @@
               >
             </li>
             <li>
+              <a
+                href="/game.html"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Game</a
+              >
+            </li>
+            <li>
               <!-- Toggle Theme -->
               <button
                 id="theme-toggle"
@@ -163,7 +170,7 @@
     <!-- Scroll Percent -->
     <!-- Scroll Percentage Bar -->
     <div class="sticky top-0 z-50 w-full bg-gray-200 h-2 dark:bg-gray-700">
-      <div id="scroll-bar" class="h-full bg-indigo-600 rounded-full transition-width duration-200" style="width: 0%"></div>
+      <div id="scroll-bar" class="h-full bg-indigo-600 transition-width duration-200" style="width: 0%"></div>
     </div>
 
     <!-- Images Carousel -->
@@ -172,30 +179,50 @@
       <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
         <button
           type="button"
-          class="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
+          class="filter-button text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
+          data-filter="ALL"
         >
           All categories
         </button>
         <button
           type="button"
-          class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="FAVORITE"
         >
-          Art
+          Favorites
         </button>
         <button
           type="button"
-          class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="MAKEUP"
         >
           Makeup
         </button>
         <button
           type="button"
-          class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="SCULPTURES"
         >
           Sculptures
         </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="ART"
+        >
+          Art
+        </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="OTHER"
+        >
+          Other
+        </button>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8 md:px-16">
+
+      <!-- Project Grid -->
+      <div id="project_grid" class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8 md:px-16">
         <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <img class="h-auto w-full rounded-lg my-4" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="" />
           <h5 class="mb-2 text-2xl text-left font-bold tracking-tight text-gray-900 dark:text-white">Lorem ipsum dolor sit amet.</h5>
@@ -323,19 +350,15 @@
       <footer class="bg-white rounded-lg shadow dark:bg-gray-900">
         <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
           <div class="sm:flex sm:items-center sm:justify-between">
-            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-              <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
-              <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Caroline Castillo</span>
-            </a>
             <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
               <li>
                 <a href="#" class="hover:underline me-4 md:me-6">About</a>
               </li>
               <li>
-                <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+                <a href="#" class="hover:underline me-4 md:me-6">Projects</a>
               </li>
               <li>
-                <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                <a href="#" class="hover:underline me-4 md:me-6">Experience</a>
               </li>
               <li>
                 <a href="#" class="hover:underline">Contact</a>
@@ -347,6 +370,127 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      const PROJECT_TYPES = Object.freeze({
+        ALL: "ALL",
+        FAVORITE: "FAVORITE",
+        MAKEUP: "MAKEUP",
+        SCULPTURES: "SCULPTURES",
+        ART: "ART",
+        OTHER: "OTHER",
+      });
+
+      const PROJECTS = [
+        {
+          title: "Magazine",
+          description: "test",
+          image: "/static/img/sfx/mag.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.MAKEUP],
+        },
+        {
+          title: "Baby Yoda",
+          description: "test2",
+          image: "/static/img/sfx/byoda.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Jar Jar",
+          description: "test2",
+          image: "/static/img/sfx/jarjar.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Vampire Teeth",
+          description: "test2",
+          image: "/static/img/sfx/vampire.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+
+        {
+          title: "Unicorn",
+          description: "test2",
+          image: "/static/img/sfx/unicorn.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Hands",
+          description: "test2",
+          image: "/static/img/sfx/hands.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Sword",
+          description: "test2",
+          image: "/static/img/sfx/sword.jpg",
+          types: [PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "???",
+          description: "test2",
+          image: "/static/img/sfx/goth.jpg",
+          types: [PROJECT_TYPES.MAKEUP],
+        },
+        {
+          title: "Lighsaber",
+          description: "test2",
+          image: "/static/img/sfx/lightsaber.jpg",
+          types: [PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Sugar Skull",
+          description: "test2",
+          image: "/static/img/sfx/sugar_skull.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.MAKEUP],
+        },
+        {
+          title: "Star Trek",
+          description: "test2",
+          image: "/static/img/sfx/star_trek.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.MAKEUP],
+        },
+      ];
+
+      const PROJECT_GRID_DIV = document.getElementById("project_grid");
+
+      function createProjectElement(project) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <img class="h-auto max-w-full rounded-lg my-4" src="${project.image}" alt="" />
+
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${project.title}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">${project.description}</p>
+          </a>
+        `;
+
+        return div;
+      }
+
+      // Render projects based on the filter
+      function renderProjects(filter) {
+        PROJECT_GRID_DIV.innerHTML = "";
+
+        // Filter projects based on the current filter
+        const filteredProjects = filter === PROJECT_TYPES.ALL ? PROJECTS : PROJECTS.filter((project) => project.types.includes(filter));
+
+        // Append projects to the grid
+        for (const project of filteredProjects) {
+          PROJECT_GRID_DIV.appendChild(createProjectElement(project));
+        }
+      }
+
+      // Add event listeners to filter buttons
+      document.querySelectorAll(".filter-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const filter = button.getAttribute("data-filter");
+          renderProjects(filter);
+        });
+      });
+
+      // Initial rendering of projects
+      renderProjects(PROJECT_TYPES.FAVORITE);
+    </script>
 
     <!-- Update percentage scoll bar -->
     <script>
@@ -413,7 +557,7 @@
       });
     </script>
 
-    <script>
+    <!-- <script>
       var ctx = document.querySelector("canvas").getContext("2d"),
         dashLen = 150,
         dashOffset = dashLen,
@@ -454,6 +598,6 @@
           if (i < txt.length) requestAnimationFrame(loop);
         }
       })();
-    </script>
+    </script> -->
   </body>
 </html>

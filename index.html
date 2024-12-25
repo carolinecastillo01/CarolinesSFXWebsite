@@ -1,432 +1,603 @@
 <!DOCTYPE html>
-<!-- saved from url=(0061)https://carolinecastillo01.github.io/CarolinesSFXWebsite/game -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topographical Elevation Game</title>
-    <script src="./Topographical Elevation Game_files/simplex-noise.min.js.download"></script>
-    <style>
-      body {
-        display: flex;
-        flex-direction: row;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 5px;
-        background-color: #f5f5f5;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(18, minmax(15px, 30px));
-        grid-template-rows: repeat(18, minmax(15px, 30px));
-        gap: 2px;
-        margin: 5px 0;
-      }
-
-      .grid-cell {
-        width: 100%;
-        height: 100%;
-        border: 1px solid transparent;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        background-color: #4682b4; /* Undiscovered: blue */
-      }
-
-      .revealed {
-        background-color: rgba(34, 139, 34, var(--opacity)); /* Revealed: topographical map */
-      }
-
-      .highlight-center {
-        background-color: #ffa07a !important; /* Highlight for the center */
-      }
-
-      .highlight-neighbor {
-        background-color: #ffd700 !important; /* Highlight for neighbors */
-      }
-
-      .details {
-        font-size: 16px;
-        background-color: #ffffff;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 500px;
-        text-align: center;
-      }
-
-      .cross {
-        display: grid;
-        grid-template-rows: repeat(3, minmax(30px, 50px));
-        grid-template-columns: repeat(3, minmax(30px, 50px));
-        gap: 5px;
-        justify-content: center;
-        align-items: center;
-        margin-top: 5px;
-      }
-
-      .cross-cell {
-        width: 100%;
-        height: 100%;
-        background-color: #d3d3d3;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-      }
-
-      .cross-empty {
-        background-color: transparent;
-        border: none;
-      }
-
-      .cross-center {
-        background-color: #ffa07a;
-      }
-
-      .button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        font-size: 14px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      .button:hover {
-        background-color: #0056b3;
-      }
-
-      @media (max-width: 1000px) {
-        body {
-          flex-direction: column; /* Stack vertically on small screens */
-          align-items: center;
-        }
-
-        .grid {
-          grid-template-columns: repeat(18, 1fr); /* Distribute columns evenly */
-          grid-template-rows: repeat(18, 1fr); /* Distribute rows evenly */
-          width: 90vw; /* Make grid take up 90% of the viewport width */
-          height: 90vw; /* Make grid height equal to its width (square) */
-          margin: 0;
-        }
-
-        .grid-cell {
-          width: 100%; /* Cell size adapts to the grid's calculated size */
-          height: 100%;
-        }
-
-        .cross {
-          grid-template-rows: repeat(3, minmax(30px, 40px));
-          grid-template-columns: repeat(3, minmax(30px, 40px));
-        }
-
-        .cross-cell {
-          font-size: 10px; /* Adjust font size to fit smaller cells */
-        }
-
-        .button {
-          font-size: 12px;
-          padding: 8px 15px;
-        }
-      }
-
-slidecontainer {
-width: 100%; /* Width of the outside container */
-}
-
-slider {
--webkit-appearance: none; /* Override default CSS styles */
-appearance: none;
-width: 100%; /* Full-width */
-height: 25px; /* Specified height */
-background: #d3d3d3; /* Grey background */
-outline: none; /* Remove outline */
-opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
--webkit-transition: .2s; /* 0.2 seconds transition on hover */
-transition: opacity .2s;
-}
-
-slider:hover {
-opacity: 1; /* Fully shown on mouse-over */
-}
-
-slider::-webkit-slider-thumb {
--webkit-appearance: none; /* Override default look */
-appearance: none;
-width: 25px; /* Set a specific slider handle width */
-height: 25px; /* Slider handle height */
-background: #04AA6D; /* Green background */
-cursor: pointer; /* Cursor on hover */
-}
-
-slider::-moz-range-thumb {
-width: 25px; /* Set a specific slider handle width */
-height: 25px; /* Slider handle height */
-background: #04AA6D; /* Green background */
-cursor: pointer; /* Cursor on hover */
-}
-    </style>
-  </head>
-  <body>
-    <div class="details">
-      <h2>Find the Highest Point</h2>
-      <p id="score">Clicks: 0</p>
-      <button id="reset-button" class="button">Reset Game</button>
-      <div class="cross">
-        <div class="cross-cell cross-empty"></div>
-        <div class="cross-cell" id="top-cell">--</div>
-        <div class="cross-cell cross-empty"></div>
-        <div class="cross-cell" id="center-left-cell">--</div>
-        <div class="cross-cell cross-center" id="center-cell">--</div>
-        <div class="cross-cell" id="center-right-cell">--</div>
-        <div class="cross-cell cross-empty"></div>
-        <div class="cross-cell" id="bottom-cell">--</div>
-        <div class="cross-cell cross-empty"></div>
-      </div>
-
-	<div id="history"></div>
-    
-    </div>
-
-    <div class="grid"><div class="grid-cell" data-row="0" data-col="0" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="0" data-col="1" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="0" data-col="2" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="0" data-col="3" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="0" data-col="4" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="0" data-col="5" data-elevation="19" style="--opacity: 0.49;"></div><div class="grid-cell" data-row="0" data-col="6" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="0" data-col="7" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="0" data-col="8" data-elevation="-2" style="--opacity: 0.27999999999999997;"></div><div class="grid-cell" data-row="0" data-col="9" data-elevation="-15" style="--opacity: 0.15;"></div><div class="grid-cell" data-row="0" data-col="10" data-elevation="-18" style="--opacity: 0.12;"></div><div class="grid-cell" data-row="0" data-col="11" data-elevation="-9" style="--opacity: 0.21;"></div><div class="grid-cell" data-row="0" data-col="12" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="0" data-col="13" data-elevation="15" style="--opacity: 0.44999999999999996;"></div><div class="grid-cell" data-row="0" data-col="14" data-elevation="18" style="--opacity: 0.48;"></div><div class="grid-cell" data-row="0" data-col="15" data-elevation="16" style="--opacity: 0.45999999999999996;"></div><div class="grid-cell" data-row="0" data-col="16" data-elevation="14" style="--opacity: 0.44;"></div><div class="grid-cell" data-row="0" data-col="17" data-elevation="17" style="--opacity: 0.47;"></div><div class="grid-cell" data-row="1" data-col="0" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="1" data-col="1" data-elevation="18" style="--opacity: 0.48;"></div><div class="grid-cell" data-row="1" data-col="2" data-elevation="13" style="--opacity: 0.43;"></div><div class="grid-cell" data-row="1" data-col="3" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="1" data-col="4" data-elevation="7" style="--opacity: 0.37;"></div><div class="grid-cell" data-row="1" data-col="5" data-elevation="10" style="--opacity: 0.4;"></div><div class="grid-cell" data-row="1" data-col="6" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="1" data-col="7" data-elevation="9" style="--opacity: 0.39;"></div><div class="grid-cell" data-row="1" data-col="8" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="1" data-col="9" data-elevation="-7" style="--opacity: 0.22999999999999998;"></div><div class="grid-cell" data-row="1" data-col="10" data-elevation="-6" style="--opacity: 0.24;"></div><div class="grid-cell" data-row="1" data-col="11" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="1" data-col="12" data-elevation="19" style="--opacity: 0.49;"></div><div class="grid-cell" data-row="1" data-col="13" data-elevation="29" style="--opacity: 0.59;"></div><div class="grid-cell" data-row="1" data-col="14" data-elevation="30" style="--opacity: 0.6;"></div><div class="grid-cell" data-row="1" data-col="15" data-elevation="26" style="--opacity: 0.56;"></div><div class="grid-cell" data-row="1" data-col="16" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="1" data-col="17" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="2" data-col="0" data-elevation="34" style="--opacity: 0.64;"></div><div class="grid-cell" data-row="2" data-col="1" data-elevation="32" style="--opacity: 0.62;"></div><div class="grid-cell" data-row="2" data-col="2" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="2" data-col="3" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="2" data-col="4" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="2" data-col="5" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="2" data-col="6" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="2" data-col="7" data-elevation="9" style="--opacity: 0.39;"></div><div class="grid-cell" data-row="2" data-col="8" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="2" data-col="9" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="2" data-col="10" data-elevation="4" style="--opacity: 0.33999999999999997;"></div><div class="grid-cell" data-row="2" data-col="11" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="2" data-col="12" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="2" data-col="13" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="2" data-col="14" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="2" data-col="15" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="2" data-col="16" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="2" data-col="17" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="3" data-col="0" data-elevation="40" style="--opacity: 0.7;"></div><div class="grid-cell" data-row="3" data-col="1" data-elevation="35" style="--opacity: 0.6499999999999999;"></div><div class="grid-cell" data-row="3" data-col="2" data-elevation="22" style="--opacity: 0.52;"></div><div class="grid-cell" data-row="3" data-col="3" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="3" data-col="4" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="3" data-col="5" data-elevation="2" style="--opacity: 0.32;"></div><div class="grid-cell" data-row="3" data-col="6" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="3" data-col="7" data-elevation="17" style="--opacity: 0.47;"></div><div class="grid-cell" data-row="3" data-col="8" data-elevation="17" style="--opacity: 0.47;"></div><div class="grid-cell" data-row="3" data-col="9" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="3" data-col="10" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="3" data-col="11" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="3" data-col="12" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="3" data-col="13" data-elevation="13" style="--opacity: 0.43;"></div><div class="grid-cell" data-row="3" data-col="14" data-elevation="13" style="--opacity: 0.43;"></div><div class="grid-cell" data-row="3" data-col="15" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="3" data-col="16" data-elevation="10" style="--opacity: 0.4;"></div><div class="grid-cell" data-row="3" data-col="17" data-elevation="13" style="--opacity: 0.43;"></div><div class="grid-cell" data-row="4" data-col="0" data-elevation="42" style="--opacity: 0.72;"></div><div class="grid-cell" data-row="4" data-col="1" data-elevation="31" style="--opacity: 0.61;"></div><div class="grid-cell" data-row="4" data-col="2" data-elevation="14" style="--opacity: 0.44;"></div><div class="grid-cell" data-row="4" data-col="3" data-elevation="-1" style="--opacity: 0.29;"></div><div class="grid-cell" data-row="4" data-col="4" data-elevation="-5" style="--opacity: 0.25;"></div><div class="grid-cell" data-row="4" data-col="5" data-elevation="2" style="--opacity: 0.32;"></div><div class="grid-cell" data-row="4" data-col="6" data-elevation="16" style="--opacity: 0.45999999999999996;"></div><div class="grid-cell" data-row="4" data-col="7" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="4" data-col="8" data-elevation="30" style="--opacity: 0.6;"></div><div class="grid-cell" data-row="4" data-col="9" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="4" data-col="10" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="4" data-col="11" data-elevation="-2" style="--opacity: 0.27999999999999997;"></div><div class="grid-cell" data-row="4" data-col="12" data-elevation="-6" style="--opacity: 0.24;"></div><div class="grid-cell" data-row="4" data-col="13" data-elevation="-8" style="--opacity: 0.21999999999999997;"></div><div class="grid-cell" data-row="4" data-col="14" data-elevation="-8" style="--opacity: 0.21999999999999997;"></div><div class="grid-cell" data-row="4" data-col="15" data-elevation="-7" style="--opacity: 0.22999999999999998;"></div><div class="grid-cell" data-row="4" data-col="16" data-elevation="-4" style="--opacity: 0.26;"></div><div class="grid-cell" data-row="4" data-col="17" data-elevation="2" style="--opacity: 0.32;"></div><div class="grid-cell" data-row="5" data-col="0" data-elevation="42" style="--opacity: 0.72;"></div><div class="grid-cell" data-row="5" data-col="1" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="5" data-col="2" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="5" data-col="3" data-elevation="-6" style="--opacity: 0.24;"></div><div class="grid-cell" data-row="5" data-col="4" data-elevation="-7" style="--opacity: 0.22999999999999998;"></div><div class="grid-cell" data-row="5" data-col="5" data-elevation="4" style="--opacity: 0.33999999999999997;"></div><div class="grid-cell" data-row="5" data-col="6" data-elevation="22" style="--opacity: 0.52;"></div><div class="grid-cell" data-row="5" data-col="7" data-elevation="37" style="--opacity: 0.6699999999999999;"></div><div class="grid-cell" data-row="5" data-col="8" data-elevation="40" style="--opacity: 0.7;"></div><div class="grid-cell" data-row="5" data-col="9" data-elevation="30" style="--opacity: 0.6;"></div><div class="grid-cell" data-row="5" data-col="10" data-elevation="9" style="--opacity: 0.39;"></div><div class="grid-cell" data-row="5" data-col="11" data-elevation="-10" style="--opacity: 0.19999999999999998;"></div><div class="grid-cell" data-row="5" data-col="12" data-elevation="-20" style="--opacity: 0.09999999999999998;"></div><div class="grid-cell" data-row="5" data-col="13" data-elevation="-25" style="--opacity: 0.04999999999999999;"></div><div class="grid-cell" data-row="5" data-col="14" data-elevation="-26" style="--opacity: 0.03999999999999998;"></div><div class="grid-cell" data-row="5" data-col="15" data-elevation="-22" style="--opacity: 0.07999999999999999;"></div><div class="grid-cell" data-row="5" data-col="16" data-elevation="-16" style="--opacity: 0.13999999999999999;"></div><div class="grid-cell" data-row="5" data-col="17" data-elevation="-5" style="--opacity: 0.25;"></div><div class="grid-cell" data-row="6" data-col="0" data-elevation="41" style="--opacity: 0.71;"></div><div class="grid-cell" data-row="6" data-col="1" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="6" data-col="2" data-elevation="10" style="--opacity: 0.4;"></div><div class="grid-cell" data-row="6" data-col="3" data-elevation="-3" style="--opacity: 0.27;"></div><div class="grid-cell" data-row="6" data-col="4" data-elevation="-3" style="--opacity: 0.27;"></div><div class="grid-cell" data-row="6" data-col="5" data-elevation="9" style="--opacity: 0.39;"></div><div class="grid-cell" data-row="6" data-col="6" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="6" data-col="7" data-elevation="42" style="--opacity: 0.72;"></div><div class="grid-cell" data-row="6" data-col="8" data-elevation="46" style="--opacity: 0.76;"></div><div class="grid-cell" data-row="6" data-col="9" data-elevation="35" style="--opacity: 0.6499999999999999;"></div><div class="grid-cell" data-row="6" data-col="10" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="6" data-col="11" data-elevation="-14" style="--opacity: 0.15999999999999998;"></div><div class="grid-cell" data-row="6" data-col="12" data-elevation="-28" style="--opacity: 0.019999999999999962;"></div><div class="grid-cell" data-row="6" data-col="13" data-elevation="-34" style="--opacity: -0.040000000000000036;"></div><div class="grid-cell" data-row="6" data-col="14" data-elevation="-33" style="--opacity: -0.030000000000000027;"></div><div class="grid-cell" data-row="6" data-col="15" data-elevation="-28" style="--opacity: 0.019999999999999962;"></div><div class="grid-cell" data-row="6" data-col="16" data-elevation="-20" style="--opacity: 0.09999999999999998;"></div><div class="grid-cell" data-row="6" data-col="17" data-elevation="-7" style="--opacity: 0.22999999999999998;"></div><div class="grid-cell" data-row="7" data-col="0" data-elevation="37" style="--opacity: 0.6699999999999999;"></div><div class="grid-cell" data-row="7" data-col="1" data-elevation="30" style="--opacity: 0.6;"></div><div class="grid-cell" data-row="7" data-col="2" data-elevation="17" style="--opacity: 0.47;"></div><div class="grid-cell" data-row="7" data-col="3" data-elevation="7" style="--opacity: 0.37;"></div><div class="grid-cell" data-row="7" data-col="4" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="7" data-col="5" data-elevation="15" style="--opacity: 0.44999999999999996;"></div><div class="grid-cell" data-row="7" data-col="6" data-elevation="30" style="--opacity: 0.6;"></div><div class="grid-cell" data-row="7" data-col="7" data-elevation="43" style="--opacity: 0.73;"></div><div class="grid-cell" data-row="7" data-col="8" data-elevation="45" style="--opacity: 0.75;"></div><div class="grid-cell" data-row="7" data-col="9" data-elevation="33" style="--opacity: 0.63;"></div><div class="grid-cell" data-row="7" data-col="10" data-elevation="10" style="--opacity: 0.4;"></div><div class="grid-cell" data-row="7" data-col="11" data-elevation="-16" style="--opacity: 0.13999999999999999;"></div><div class="grid-cell" data-row="7" data-col="12" data-elevation="-33" style="--opacity: -0.030000000000000027;"></div><div class="grid-cell" data-row="7" data-col="13" data-elevation="-37" style="--opacity: -0.07;"></div><div class="grid-cell" data-row="7" data-col="14" data-elevation="-35" style="--opacity: -0.04999999999999999;"></div><div class="grid-cell" data-row="7" data-col="15" data-elevation="-28" style="--opacity: 0.019999999999999962;"></div><div class="grid-cell" data-row="7" data-col="16" data-elevation="-19" style="--opacity: 0.10999999999999999;"></div><div class="grid-cell" data-row="7" data-col="17" data-elevation="-7" style="--opacity: 0.22999999999999998;"></div><div class="grid-cell" data-row="8" data-col="0" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="8" data-col="1" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="8" data-col="2" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="8" data-col="3" data-elevation="18" style="--opacity: 0.48;"></div><div class="grid-cell" data-row="8" data-col="4" data-elevation="16" style="--opacity: 0.45999999999999996;"></div><div class="grid-cell" data-row="8" data-col="5" data-elevation="22" style="--opacity: 0.52;"></div><div class="grid-cell" data-row="8" data-col="6" data-elevation="32" style="--opacity: 0.62;"></div><div class="grid-cell" data-row="8" data-col="7" data-elevation="40" style="--opacity: 0.7;"></div><div class="grid-cell" data-row="8" data-col="8" data-elevation="40" style="--opacity: 0.7;"></div><div class="grid-cell" data-row="8" data-col="9" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="8" data-col="10" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="8" data-col="11" data-elevation="-20" style="--opacity: 0.09999999999999998;"></div><div class="grid-cell" data-row="8" data-col="12" data-elevation="-37" style="--opacity: -0.07;"></div><div class="grid-cell" data-row="8" data-col="13" data-elevation="-41" style="--opacity: -0.10999999999999999;"></div><div class="grid-cell" data-row="8" data-col="14" data-elevation="-37" style="--opacity: -0.07;"></div><div class="grid-cell" data-row="8" data-col="15" data-elevation="-29" style="--opacity: 0.010000000000000009;"></div><div class="grid-cell" data-row="8" data-col="16" data-elevation="-22" style="--opacity: 0.07999999999999999;"></div><div class="grid-cell" data-row="8" data-col="17" data-elevation="-14" style="--opacity: 0.15999999999999998;"></div><div class="grid-cell" data-row="9" data-col="0" data-elevation="17" style="--opacity: 0.47;"></div><div class="grid-cell" data-row="9" data-col="1" data-elevation="25" style="--opacity: 0.55;"></div><div class="grid-cell" data-row="9" data-col="2" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="9" data-col="3" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="9" data-col="4" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="9" data-col="5" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="9" data-col="6" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="9" data-col="7" data-elevation="35" style="--opacity: 0.6499999999999999;"></div><div class="grid-cell" data-row="9" data-col="8" data-elevation="35" style="--opacity: 0.6499999999999999;"></div><div class="grid-cell" data-row="9" data-col="9" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="9" data-col="10" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="9" data-col="11" data-elevation="-20" style="--opacity: 0.09999999999999998;"></div><div class="grid-cell" data-row="9" data-col="12" data-elevation="-40" style="--opacity: -0.10000000000000003;"></div><div class="grid-cell" data-row="9" data-col="13" data-elevation="-45" style="--opacity: -0.15000000000000002;"></div><div class="grid-cell" data-row="9" data-col="14" data-elevation="-42" style="--opacity: -0.12;"></div><div class="grid-cell" data-row="9" data-col="15" data-elevation="-36" style="--opacity: -0.06;"></div><div class="grid-cell" data-row="9" data-col="16" data-elevation="-31" style="--opacity: -0.010000000000000009;"></div><div class="grid-cell" data-row="9" data-col="17" data-elevation="-28" style="--opacity: 0.019999999999999962;"></div><div class="grid-cell" data-row="10" data-col="0" data-elevation="12" style="--opacity: 0.42;"></div><div class="grid-cell" data-row="10" data-col="1" data-elevation="23" style="--opacity: 0.53;"></div><div class="grid-cell" data-row="10" data-col="2" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="10" data-col="3" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="10" data-col="4" data-elevation="15" style="--opacity: 0.44999999999999996;"></div><div class="grid-cell" data-row="10" data-col="5" data-elevation="10" style="--opacity: 0.4;"></div><div class="grid-cell" data-row="10" data-col="6" data-elevation="15" style="--opacity: 0.44999999999999996;"></div><div class="grid-cell" data-row="10" data-col="7" data-elevation="26" style="--opacity: 0.56;"></div><div class="grid-cell" data-row="10" data-col="8" data-elevation="34" style="--opacity: 0.64;"></div><div class="grid-cell" data-row="10" data-col="9" data-elevation="29" style="--opacity: 0.59;"></div><div class="grid-cell" data-row="10" data-col="10" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="10" data-col="11" data-elevation="-12" style="--opacity: 0.18;"></div><div class="grid-cell" data-row="10" data-col="12" data-elevation="-36" style="--opacity: -0.06;"></div><div class="grid-cell" data-row="10" data-col="13" data-elevation="-46" style="--opacity: -0.16000000000000003;"></div><div class="grid-cell" data-row="10" data-col="14" data-elevation="-46" style="--opacity: -0.16000000000000003;"></div><div class="grid-cell" data-row="10" data-col="15" data-elevation="-43" style="--opacity: -0.13;"></div><div class="grid-cell" data-row="10" data-col="16" data-elevation="-42" style="--opacity: -0.12;"></div><div class="grid-cell" data-row="10" data-col="17" data-elevation="-41" style="--opacity: -0.10999999999999999;"></div><div class="grid-cell" data-row="11" data-col="0" data-elevation="17" style="--opacity: 0.47;"></div><div class="grid-cell" data-row="11" data-col="1" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="11" data-col="2" data-elevation="29" style="--opacity: 0.59;"></div><div class="grid-cell" data-row="11" data-col="3" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="11" data-col="4" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="11" data-col="5" data-elevation="-4" style="--opacity: 0.26;"></div><div class="grid-cell" data-row="11" data-col="6" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="11" data-col="7" data-elevation="16" style="--opacity: 0.45999999999999996;"></div><div class="grid-cell" data-row="11" data-col="8" data-elevation="34" style="--opacity: 0.64;"></div><div class="grid-cell" data-row="11" data-col="9" data-elevation="39" style="--opacity: 0.69;"></div><div class="grid-cell" data-row="11" data-col="10" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="11" data-col="11" data-elevation="5" style="--opacity: 0.35;"></div><div class="grid-cell" data-row="11" data-col="12" data-elevation="-22" style="--opacity: 0.07999999999999999;"></div><div class="grid-cell" data-row="11" data-col="13" data-elevation="-36" style="--opacity: -0.06;"></div><div class="grid-cell" data-row="11" data-col="14" data-elevation="-41" style="--opacity: -0.10999999999999999;"></div><div class="grid-cell" data-row="11" data-col="15" data-elevation="-42" style="--opacity: -0.12;"></div><div class="grid-cell" data-row="11" data-col="16" data-elevation="-43" style="--opacity: -0.13;"></div><div class="grid-cell" data-row="11" data-col="17" data-elevation="-46" style="--opacity: -0.16000000000000003;"></div><div class="grid-cell" data-row="12" data-col="0" data-elevation="30" style="--opacity: 0.6;"></div><div class="grid-cell" data-row="12" data-col="1" data-elevation="39" style="--opacity: 0.69;"></div><div class="grid-cell" data-row="12" data-col="2" data-elevation="36" style="--opacity: 0.6599999999999999;"></div><div class="grid-cell" data-row="12" data-col="3" data-elevation="22" style="--opacity: 0.52;"></div><div class="grid-cell" data-row="12" data-col="4" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="12" data-col="5" data-elevation="-11" style="--opacity: 0.19;"></div><div class="grid-cell" data-row="12" data-col="6" data-elevation="-10" style="--opacity: 0.19999999999999998;"></div><div class="grid-cell" data-row="12" data-col="7" data-elevation="8" style="--opacity: 0.38;"></div><div class="grid-cell" data-row="12" data-col="8" data-elevation="33" style="--opacity: 0.63;"></div><div class="grid-cell" data-row="12" data-col="9" data-elevation="48" style="--opacity: 0.78;"></div><div class="grid-cell" data-row="12" data-col="10" data-elevation="44" style="--opacity: 0.74;"></div><div class="grid-cell" data-row="12" data-col="11" data-elevation="25" style="--opacity: 0.55;"></div><div class="grid-cell" data-row="12" data-col="12" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="12" data-col="13" data-elevation="-19" style="--opacity: 0.10999999999999999;"></div><div class="grid-cell" data-row="12" data-col="14" data-elevation="-27" style="--opacity: 0.02999999999999997;"></div><div class="grid-cell" data-row="12" data-col="15" data-elevation="-29" style="--opacity: 0.010000000000000009;"></div><div class="grid-cell" data-row="12" data-col="16" data-elevation="-32" style="--opacity: -0.020000000000000018;"></div><div class="grid-cell" data-row="12" data-col="17" data-elevation="-38" style="--opacity: -0.08000000000000002;"></div><div class="grid-cell" data-row="13" data-col="0" data-elevation="45" style="--opacity: 0.75;"></div><div class="grid-cell" data-row="13" data-col="1" data-elevation="52" style="--opacity: 0.8200000000000001;"></div><div class="grid-cell" data-row="13" data-col="2" data-elevation="49" style="--opacity: 0.79;"></div><div class="grid-cell" data-row="13" data-col="3" data-elevation="33" style="--opacity: 0.63;"></div><div class="grid-cell" data-row="13" data-col="4" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="13" data-col="5" data-elevation="-7" style="--opacity: 0.22999999999999998;"></div><div class="grid-cell" data-row="13" data-col="6" data-elevation="-12" style="--opacity: 0.18;"></div><div class="grid-cell" data-row="13" data-col="7" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="13" data-col="8" data-elevation="29" style="--opacity: 0.59;"></div><div class="grid-cell" data-row="13" data-col="9" data-elevation="49" style="--opacity: 0.79;"></div><div class="grid-cell" data-row="13" data-col="10" data-elevation="52" style="--opacity: 0.8200000000000001;"></div><div class="grid-cell" data-row="13" data-col="11" data-elevation="38" style="--opacity: 0.6799999999999999;"></div><div class="grid-cell" data-row="13" data-col="12" data-elevation="18" style="--opacity: 0.48;"></div><div class="grid-cell" data-row="13" data-col="13" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="13" data-col="14" data-elevation="-9" style="--opacity: 0.21;"></div><div class="grid-cell" data-row="13" data-col="15" data-elevation="-11" style="--opacity: 0.19;"></div><div class="grid-cell" data-row="13" data-col="16" data-elevation="-14" style="--opacity: 0.15999999999999998;"></div><div class="grid-cell" data-row="13" data-col="17" data-elevation="-21" style="--opacity: 0.09;"></div><div class="grid-cell" data-row="14" data-col="0" data-elevation="51" style="--opacity: 0.81;"></div><div class="grid-cell" data-row="14" data-col="1" data-elevation="61" style="--opacity: 0.9099999999999999;"></div><div class="grid-cell" data-row="14" data-col="2" data-elevation="61" style="--opacity: 0.9099999999999999;"></div><div class="grid-cell" data-row="14" data-col="3" data-elevation="48" style="--opacity: 0.78;"></div><div class="grid-cell" data-row="14" data-col="4" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="14" data-col="5" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="14" data-col="6" data-elevation="-5" style="--opacity: 0.25;"></div><div class="grid-cell" data-row="14" data-col="7" data-elevation="1" style="--opacity: 0.31;"></div><div class="grid-cell" data-row="14" data-col="8" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="14" data-col="9" data-elevation="40" style="--opacity: 0.7;"></div><div class="grid-cell" data-row="14" data-col="10" data-elevation="47" style="--opacity: 0.77;"></div><div class="grid-cell" data-row="14" data-col="11" data-elevation="39" style="--opacity: 0.69;"></div><div class="grid-cell" data-row="14" data-col="12" data-elevation="26" style="--opacity: 0.56;"></div><div class="grid-cell" data-row="14" data-col="13" data-elevation="13" style="--opacity: 0.43;"></div><div class="grid-cell" data-row="14" data-col="14" data-elevation="7" style="--opacity: 0.37;"></div><div class="grid-cell" data-row="14" data-col="15" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="14" data-col="16" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="14" data-col="17" data-elevation="-6" style="--opacity: 0.24;"></div><div class="grid-cell" data-row="15" data-col="0" data-elevation="45" style="--opacity: 0.75;"></div><div class="grid-cell" data-row="15" data-col="1" data-elevation="60" style="--opacity: 0.8999999999999999;"></div><div class="grid-cell" data-row="15" data-col="2" data-elevation="66" style="--opacity: 0.96;"></div><div class="grid-cell" data-row="15" data-col="3" data-elevation="58" style="--opacity: 0.8799999999999999;"></div><div class="grid-cell" data-row="15" data-col="4" data-elevation="40" style="--opacity: 0.7;"></div><div class="grid-cell" data-row="15" data-col="5" data-elevation="19" style="--opacity: 0.49;"></div><div class="grid-cell" data-row="15" data-col="6" data-elevation="4" style="--opacity: 0.33999999999999997;"></div><div class="grid-cell" data-row="15" data-col="7" data-elevation="0" style="--opacity: 0.3;"></div><div class="grid-cell" data-row="15" data-col="8" data-elevation="10" style="--opacity: 0.4;"></div><div class="grid-cell" data-row="15" data-col="9" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="15" data-col="10" data-elevation="32" style="--opacity: 0.62;"></div><div class="grid-cell" data-row="15" data-col="11" data-elevation="31" style="--opacity: 0.61;"></div><div class="grid-cell" data-row="15" data-col="12" data-elevation="25" style="--opacity: 0.55;"></div><div class="grid-cell" data-row="15" data-col="13" data-elevation="19" style="--opacity: 0.49;"></div><div class="grid-cell" data-row="15" data-col="14" data-elevation="18" style="--opacity: 0.48;"></div><div class="grid-cell" data-row="15" data-col="15" data-elevation="19" style="--opacity: 0.49;"></div><div class="grid-cell" data-row="15" data-col="16" data-elevation="15" style="--opacity: 0.44999999999999996;"></div><div class="grid-cell" data-row="15" data-col="17" data-elevation="3" style="--opacity: 0.32999999999999996;"></div><div class="grid-cell" data-row="16" data-col="0" data-elevation="31" style="--opacity: 0.61;"></div><div class="grid-cell" data-row="16" data-col="1" data-elevation="48" style="--opacity: 0.78;"></div><div class="grid-cell" data-row="16" data-col="2" data-elevation="59" style="--opacity: 0.8899999999999999;"></div><div class="grid-cell" data-row="16" data-col="3" data-elevation="56" style="--opacity: 0.8600000000000001;"></div><div class="grid-cell" data-row="16" data-col="4" data-elevation="43" style="--opacity: 0.73;"></div><div class="grid-cell" data-row="16" data-col="5" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="16" data-col="6" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="16" data-col="7" data-elevation="-4" style="--opacity: 0.26;"></div><div class="grid-cell" data-row="16" data-col="8" data-elevation="-3" style="--opacity: 0.27;"></div><div class="grid-cell" data-row="16" data-col="9" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="16" data-col="10" data-elevation="16" style="--opacity: 0.45999999999999996;"></div><div class="grid-cell" data-row="16" data-col="11" data-elevation="22" style="--opacity: 0.52;"></div><div class="grid-cell" data-row="16" data-col="12" data-elevation="23" style="--opacity: 0.53;"></div><div class="grid-cell" data-row="16" data-col="13" data-elevation="23" style="--opacity: 0.53;"></div><div class="grid-cell" data-row="16" data-col="14" data-elevation="26" style="--opacity: 0.56;"></div><div class="grid-cell" data-row="16" data-col="15" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="16" data-col="16" data-elevation="21" style="--opacity: 0.51;"></div><div class="grid-cell" data-row="16" data-col="17" data-elevation="6" style="--opacity: 0.36;"></div><div class="grid-cell" data-row="17" data-col="0" data-elevation="11" style="--opacity: 0.41;"></div><div class="grid-cell" data-row="17" data-col="1" data-elevation="28" style="--opacity: 0.5800000000000001;"></div><div class="grid-cell" data-row="17" data-col="2" data-elevation="41" style="--opacity: 0.71;"></div><div class="grid-cell" data-row="17" data-col="3" data-elevation="44" style="--opacity: 0.74;"></div><div class="grid-cell" data-row="17" data-col="4" data-elevation="36" style="--opacity: 0.6599999999999999;"></div><div class="grid-cell" data-row="17" data-col="5" data-elevation="18" style="--opacity: 0.48;"></div><div class="grid-cell" data-row="17" data-col="6" data-elevation="-1" style="--opacity: 0.29;"></div><div class="grid-cell" data-row="17" data-col="7" data-elevation="-13" style="--opacity: 0.16999999999999998;"></div><div class="grid-cell" data-row="17" data-col="8" data-elevation="-14" style="--opacity: 0.15999999999999998;"></div><div class="grid-cell" data-row="17" data-col="9" data-elevation="-5" style="--opacity: 0.25;"></div><div class="grid-cell" data-row="17" data-col="10" data-elevation="9" style="--opacity: 0.39;"></div><div class="grid-cell" data-row="17" data-col="11" data-elevation="20" style="--opacity: 0.5;"></div><div class="grid-cell" data-row="17" data-col="12" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="17" data-col="13" data-elevation="27" style="--opacity: 0.5700000000000001;"></div><div class="grid-cell" data-row="17" data-col="14" data-elevation="31" style="--opacity: 0.61;"></div><div class="grid-cell" data-row="17" data-col="15" data-elevation="32" style="--opacity: 0.62;"></div><div class="grid-cell" data-row="17" data-col="16" data-elevation="24" style="--opacity: 0.54;"></div><div class="grid-cell" data-row="17" data-col="17" data-elevation="6" style="--opacity: 0.36;"></div></div>
-
-<button id="hint" class="button">Robot Hint</button>
-<div style="display: 'flex'; flex-direction:'column'">
-<button id="run" class="button">Robot Solve</button>
-<div class="slidecontainer">
-<input type="range" min="1" max="1000"value="50" class="slider" id="myRange">
-<p>Speed: <span id="demo"></span></p>
-</div>
-</div>
-
-
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Configure Tailwind to enable dark mode via class
+      tailwind.config = {
+        darkMode: "class", // This ensures Tailwind respects dark mode classes
+      };
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <title>Caroline Castillo</title>
 
     <script>
-      const gridSize = 18;
-      const noise = new SimplexNoise();
-      const scale = 0.1;
-      let clickCount = 0;
-      let peakRow, peakCol, highestPoint, gridHeights;
-let solved = false;
-let lastClickedRow = 0;
-let lastClickedCol = 0;
-
-      const grid = document.querySelector(".grid");
-      const scoreElement = document.getElementById("score");
-
-      function generateGrid() {
-	lastClickedRow = 0;
-lastClickedCol = 0;
-	solved = false;
-        // Update cross details
-        document.getElementById("top-cell").textContent = "--";
-        document.getElementById("center-left-cell").textContent =  "--";
-        document.getElementById("center-cell").textContent = "--";
-        document.getElementById("center-right-cell").textContent = "--"
-        document.getElementById("bottom-cell").textContent = "--";
-
-	document.getElementById("history").innerHTML = "";
-        clickCount = 0;
-        scoreElement.textContent = "Clicks: 0";
-
-        grid.innerHTML = ""; // Clear the grid
-
-        peakRow = Math.floor(Math.random() * gridSize);
-        peakCol = Math.floor(Math.random() * gridSize);
-
-        gridHeights = Array.from({ length: gridSize }, (_, y) =>
-          Array.from({ length: gridSize }, (_, x) => {
-            const noiseValue = noise.noise2D(x * scale, y * scale);
-            const distanceFromPeak = Math.sqrt((x - peakCol) ** 2 + (y - peakRow) ** 2);
-            const radialFalloff = Math.max(0, 1 - distanceFromPeak / (gridSize / 2));
-            return Math.floor((noiseValue + radialFalloff) * 50);
-          })
-        );
-
-        highestPoint = { row: 0, col: 0, value: -Infinity };
-        gridHeights.forEach((row, y) => {
-          row.forEach((value, x) => {
-            if (value > highestPoint.value) {
-              highestPoint = { row: y, col: x, value };
-            }
-          });
-        });
-
-        for (let y = 0; y < gridSize; y++) {
-          for (let x = 0; x < gridSize; x++) {
-            const cell = document.createElement("div");
-            const elevation = gridHeights[y][x];
-            cell.classList.add("grid-cell");
-            cell.dataset.row = y;
-            cell.dataset.col = x;
-            cell.dataset.elevation = elevation;
-            cell.style.setProperty("--opacity", 0.3 + elevation / 100);
-            cell.addEventListener("click", () => handleGridClick(y, x));
-            grid.appendChild(cell);
-          }
-        }
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
       }
+    </script>
+  </head>
+  <body>
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700 z-50">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+          <img class="w-10 h-10 rounded-full" src="static/img/caroline.webp" alt="Rounded avatar" />
+          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Caroline Castillo</span>
+        </a>
+        <button
+          data-collapse-toggle="navbar-dropdown"
+          type="button"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          aria-controls="navbar-dropdown"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+          </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-drop">
+          <ul
+            class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:items-center md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+          >
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
+                aria-current="page"
+                >Home</a
+              >
+            </li>
+            <li>
+              <button
+                id="dropdownNavbarLink"
+                data-dropdown-toggle="dropdownNavbar"
+                class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+              >
+                About Me
+                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                </svg>
+              </button>
+              <!-- Dropdown menu -->
+              <div id="dropdownNavbar" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Works</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Experience</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Other</a>
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                </div>
+              </div>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Services</a
+              >
+            </li>
+            <li>
+              <a
+                href="#contact"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <a
+                href="/game.html"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Game</a
+              >
+            </li>
+            <li>
+              <!-- Toggle Theme -->
+              <button
+                id="theme-toggle"
+                type="button"
+                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+              >
+                <!-- Dark icon (moon) -->
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
 
-      function handleGridClick(row, col, isRobot = false) {
-lastClickedRow = row;
-lastClickedCol = col;
-        clickCount++;
-        scoreElement.textContent = `Clicks: ${clickCount}`;
-        const centerCell = document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col}"]`);
-        const topCell = row > 0 ? document.querySelector(`.grid-cell[data-row="${row - 1}"][data-col="${col}"]`) : null;
-        const bottomCell = row < gridSize - 1 ? document.querySelector(`.grid-cell[data-row="${row + 1}"][data-col="${col}"]`) : null;
-        const leftCell = col > 0 ? document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col - 1}"]`) : null;
-        const rightCell = col < gridSize - 1 ? document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col + 1}"]`) : null;
+                <!-- Light icon (sun) -->
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
+    <!-- JUMBO title section -->
 
+    <section class="bg-white dark:bg-gray-900">
+      <!-- <canvas width="630"></canvas> -->
+      <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+        <div id="3d" class="py-4 text-4xl text-center font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Caroline Castilo</div>
+        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Your next SFX Artist</h1>
+        <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam corrupti ex asperiores ducimus sunt non beatae ad dolore adipisci enim!
+        </p>
+        <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+          <a
+            href="#"
+            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 transition-all duration-300 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          >
+            Get started
+            <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+            </svg>
+          </a>
+          <a
+            href="#"
+            class="py-3 px-5 sm:ms-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-70"
+          >
+            Learn more
+          </a>
+        </div>
+      </div>
+    </section>
 
-        if (centerCell) {centerCell.classList.add("revealed"); centerCell.innerHTML = centerCell.dataset.elevation;}
-        if (topCell) {topCell.classList.add("revealed"); topCell.innerHTML = topCell.dataset.elevation;}
-        if (bottomCell) {bottomCell.classList.add("revealed"); bottomCell.innerHTML = bottomCell.dataset.elevation;}
-        if (leftCell) {leftCell.classList.add("revealed"); leftCell.innerHTML = leftCell.dataset.elevation;}
-        if (rightCell) {rightCell.classList.add("revealed"); rightCell.innerHTML = rightCell.dataset.elevation;}
+    <!-- Scroll Percent -->
+    <!-- Scroll Percentage Bar -->
+    <div class="sticky top-0 z-50 w-full bg-gray-200 h-2 dark:bg-gray-700">
+      <div id="scroll-bar" class="h-full bg-indigo-600 transition-width duration-200" style="width: 0%"></div>
+    </div>
 
-	// Add history
-	const move = document.createElement("div");
-	move.innerHTML = isRobot ? `Robot ${row},${col}` : `Clicked ${row},${col}`
-	document.getElementById("history").appendChild(move)
+    <!-- Images Carousel -->
 
-        // Update cross details
-        document.getElementById("top-cell").textContent = topCell ? gridHeights[row - 1][col] : "--";
-        document.getElementById("center-left-cell").textContent = leftCell ? gridHeights[row][col - 1] : "--";
-        document.getElementById("center-cell").textContent = gridHeights[row][col];
-        document.getElementById("center-right-cell").textContent = rightCell ? gridHeights[row][col + 1] : "--";
-        document.getElementById("bottom-cell").textContent = bottomCell ? gridHeights[row + 1][col] : "--";
+    <div class="bg-white dark:bg-gray-900">
+      <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
+        <button
+          type="button"
+          class="filter-button text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
+          data-filter="ALL"
+        >
+          All categories
+        </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="FAVORITE"
+        >
+          Favorites
+        </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="MAKEUP"
+        >
+          Makeup
+        </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="SCULPTURES"
+        >
+          Sculptures
+        </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="ART"
+        >
+          Art
+        </button>
+        <button
+          type="button"
+          class="filter-button text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+          data-filter="OTHER"
+        >
+          Other
+        </button>
+      </div>
 
-        document.querySelectorAll(".highlight-center, .highlight-neighbor").forEach((cell) => {
-          cell.classList.remove("highlight-center", "highlight-neighbor");
-        });
-        if (centerCell) centerCell.classList.add("highlight-center");
+      <!-- Project Grid -->
+      <div id="project_grid" class="grid grid-cols-1 md:grid-cols-3 gap-4 px-8 md:px-16">
+        <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <img class="h-auto w-full rounded-lg my-4" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="" />
+          <h5 class="mb-2 text-2xl text-left font-bold tracking-tight text-gray-900 dark:text-white">Lorem ipsum dolor sit amet.</h5>
+          <p class="font-normal text-gray-700 dark:text-gray-400">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi error voluptates sit delectus in reprehenderit.</p>
+        </a>
+        <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <img class="h-auto max-w-full rounded-lg my-4" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="" />
 
-        if (row === highestPoint.row && col === highestPoint.col) {
-          solved = true;
-          alert(`You Win! Found the highest point (${highestPoint.value}) in ${clickCount} clicks.`);
-          document.querySelectorAll(".grid-cell").forEach((cell) => {
-	cell.classList.add("revealed");
-	cell.innerHTML = cell.dataset.elevation;
-	
-});
-	  //document.getElementById("history").innerHTML = "";
-        }
-      }
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Lorem ipsum dolor sit.</h5>
+          <p class="font-normal text-gray-700 dark:text-gray-400">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci quia qui reiciendis.</p>
+        </a>
 
-      document.getElementById("reset-button").addEventListener("click", generateGrid);
+        <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <img class="h-auto max-w-full rounded-lg my-4" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="" />
 
-      generateGrid();
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Lorem ipsum dolor sit amet consectetur.</h5>
+          <p class="font-normal text-gray-700 dark:text-gray-400">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero soluta impedit, nulla deleniti iusto explicabo ipsam illo omnis ducimus eius.
+          </p>
+        </a>
+      </div>
+    </div>
 
-function randomIntFromInterval(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+    <!-- Timeline -->
 
+    <div class="bg-white dark:bg-gray-900 p-20">
+      <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white py-10 text-center">My Experience</h1>
 
-function getRobotClickData(row, col){
-        const centerCell = document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col}"]`);
-        const topCell = row > 0 ? document.querySelector(`.grid-cell[data-row="${row - 1}"][data-col="${col}"]`) : null;
-        const bottomCell = row < gridSize - 1 ? document.querySelector(`.grid-cell[data-row="${row + 1}"][data-col="${col}"]`) : null;
-        const leftCell = col > 0 ? document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col - 1}"]`) : null;
-        const rightCell = col < gridSize - 1 ? document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col + 1}"]`) : null;
+      <ol class="items-center sm:flex">
+        <li class="relative mb-6 sm:mb-0">
+          <div class="flex items-center">
+            <div class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+              <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+                />
+              </svg>
+            </div>
+            <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
+          </div>
+          <div class="mt-3 sm:pe-8">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Flowbite Library v1.0.0</h3>
+            <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 2, 2021</time>
+            <p class="text-base font-normal text-gray-500 dark:text-gray-400">Get started with dozens of web components and interactive elements.</p>
+          </div>
+        </li>
+        <li class="relative mb-6 sm:mb-0">
+          <div class="flex items-center">
+            <div class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+              <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+                />
+              </svg>
+            </div>
+            <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
+          </div>
+          <div class="mt-3 sm:pe-8">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Flowbite Library v1.2.0</h3>
+            <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 23, 2021</time>
+            <p class="text-base font-normal text-gray-500 dark:text-gray-400">Get started with dozens of web components and interactive elements.</p>
+          </div>
+        </li>
+        <li class="relative mb-6 sm:mb-0">
+          <div class="flex items-center">
+            <div class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+              <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+                />
+              </svg>
+            </div>
+            <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
+          </div>
+          <div class="mt-3 sm:pe-8">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Flowbite Library v1.3.0</h3>
+            <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on January 5, 2022</time>
+            <p class="text-base font-normal text-gray-500 dark:text-gray-400">Get started with dozens of web components and interactive elements.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
 
-	const centerElevation = centerCell ? centerCell.dataset.elevation : -100;
-	const bottomElevation = bottomCell ? bottomCell.dataset.elevation : -100;
-const leftElevation = leftCell ? leftCell.dataset.elevation : -100;
-const rightElevation = rightCell ? rightCell.dataset.elevation : -100;
-const topElevation = topCell ? topCell.dataset.elevation : -100;
+    <!-- Contact -->
+    <div class="bg-white dark:bg-gray-900 p-10 lg:p-20" id="contact">
+      <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white py-10 text-center">Contact</h1>
 
-	return [topElevation, bottomElevation, centerElevation, leftElevation, rightElevation]
+      <div class="mx-auto max-w-screen-md">
+        <label for="input-group-1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Email</label>
+        <div class="relative mb-6">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+              <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
+              <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="input-group-1"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="caroline@gmail.com"
+          />
+        </div>
+        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
+        <textarea
+          id="message"
+          rows="4"
+          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Write your thoughts here..."
+        ></textarea>
 
-}
-function sleep(ms) {
-return new Promise(resolve => setTimeout(resolve, ms));
-}
+        <button
+          type="button"
+          class="mx-auto my-10 px-6 py-3.5 flex items-center text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Send
+          <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+          </svg>
+        </button>
+      </div>
+    </div>
 
-async function robot(currentRow, currentCol, speed = 100) {
-  let checked = new Set();
+    <div class="bg-white dark:bg-gray-900">
+      <footer class="bg-white rounded-lg shadow dark:bg-gray-900">
+        <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+          <div class="sm:flex sm:items-center sm:justify-between">
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+              <li>
+                <a href="#" class="hover:underline me-4 md:me-6">About</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline me-4 md:me-6">Projects</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline me-4 md:me-6">Experience</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+          <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="#" class="hover:underline">Caroline Castillo™</a>. All Rights Reserved.</span>
+        </div>
+      </footer>
+    </div>
 
+    <script>
+      const PROJECT_TYPES = Object.freeze({
+        ALL: "ALL",
+        FAVORITE: "FAVORITE",
+        MAKEUP: "MAKEUP",
+        SCULPTURES: "SCULPTURES",
+        ART: "ART",
+        OTHER: "OTHER",
+      });
 
-  handleGridClick(currentRow, currentCol, true);  // Make the initial move
+      const PROJECTS = [
+        {
+          title: "Magazine",
+          description: "test",
+          image: "static/img/sfx/mag.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.MAKEUP],
+        },
+        {
+          title: "Baby Yoda",
+          description: "test2",
+          image: "static/img/sfx/byoda.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Jar Jar",
+          description: "test2",
+          image: "static/img/sfx/jarjar.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Vampire Teeth",
+          description: "test2",
+          image: "static/img/sfx/vampire.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
 
-  // Loop until the robot finds the highest point
-  while (!solved) {
-    let foundHigher = false; // Flag to track if we find a higher neighbor
-
-    // Keep checking from the current cell or random new positions
-    while (!foundHigher && !solved) {
-      // Get the current cell's elevation and its neighbors' elevation data
-      const [top, bottom, center, left, right] = getRobotClickData(currentRow, currentCol);
-      
-      // Find the neighbor with the highest elevation
-      const neighbors = [
-        { row: currentRow - 1, col: currentCol, elevation: top },    // top
-        { row: currentRow + 1, col: currentCol, elevation: bottom }, // bottom
-        { row: currentRow, col: currentCol, elevation: center },    // center
-        { row: currentRow, col: currentCol - 1, elevation: left },  // left
-        { row: currentRow, col: currentCol + 1, elevation: right }  // right
+        {
+          title: "Unicorn",
+          description: "test2",
+          image: "static/img/sfx/unicorn.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Hands",
+          description: "test2",
+          image: "static/img/sfx/hands.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Sword",
+          description: "test2",
+          image: "static/img/sfx/sword.jpg",
+          types: [PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "???",
+          description: "test2",
+          image: "static/img/sfx/goth.jpg",
+          types: [PROJECT_TYPES.MAKEUP],
+        },
+        {
+          title: "Lighsaber",
+          description: "test2",
+          image: "static/img/sfx/lightsaber.jpg",
+          types: [PROJECT_TYPES.SCULPTURES],
+        },
+        {
+          title: "Sugar Skull",
+          description: "test2",
+          image: "static/img/sfx/sugar_skull.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.MAKEUP],
+        },
+        {
+          title: "Star Trek",
+          description: "test2",
+          image: "static/img/sfx/star_trek.jpg",
+          types: [PROJECT_TYPES.FAVORITE, PROJECT_TYPES.MAKEUP],
+        },
       ];
 
-      // Filter out invalid neighbors (those that are outside the grid)
-      const validNeighbors = neighbors.filter(neighbor => 
-        neighbor.row >= 0 && neighbor.row < gridSize && 
-        neighbor.col >= 0 && neighbor.col < gridSize
-      );
+      const PROJECT_GRID_DIV = document.getElementById("project_grid");
 
-      // Find the neighbor with the highest elevation
-      let maxNeighbor = validNeighbors.reduce((max, neighbor) => {
-        return neighbor.elevation > max.elevation ? neighbor : max;
-      }, { elevation: -Infinity });
+      function createProjectElement(project) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <a href="#" class="block max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <img class="h-auto max-w-full rounded-lg my-4" src="${project.image}" alt="" />
 
-      // If no neighbor has a higher elevation than the current cell, restart
-      if (maxNeighbor.elevation <= center) {
-        // Mark this local max and try a new random starting position
-        currentRow = randomIntFromInterval(0, gridSize - 1);
-        currentCol = randomIntFromInterval(0, gridSize - 1);
-        handleGridClick(currentRow, currentCol, true);  // Click the new random position
-        foundHigher = false; // Continue searching
-        await sleep(speed);//se before trying again
-      } else {
-        // Move to the cell with the highest elevation
-        currentRow = maxNeighbor.row;
-        currentCol = maxNeighbor.col;
-        handleGridClick(currentRow, currentCol, true);  // Click the new cell
-        foundHigher = true; // We found a better elevation, so continue searching
-        await sleep(speed);//se for a bit before making the next move
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${project.title}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">${project.description}</p>
+          </a>
+        `;
+
+        return div;
       }
-    }
-  }
-}
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
+      // Render projects based on the filter
+      function renderProjects(filter) {
+        PROJECT_GRID_DIV.innerHTML = "";
 
-    document.getElementById("run").addEventListener("click", () => robot(lastClickedRow, lastClickedCol, output));
-document.getElementById("hint").addEventListener("click", () => robot(lastClickedRow, lastClickedCol, output));
+        // Filter projects based on the current filter
+        const filteredProjects = filter === PROJECT_TYPES.ALL ? PROJECTS : PROJECTS.filter((project) => project.types.includes(filter));
 
+        // Append projects to the grid
+        for (const project of filteredProjects) {
+          PROJECT_GRID_DIV.appendChild(createProjectElement(project));
+        }
+      }
 
-output.innerHTML = slider.value; // Display the default slider value
+      // Add event listeners to filter buttons
+      document.querySelectorAll(".filter-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const filter = button.getAttribute("data-filter");
+          renderProjects(filter);
+        });
+      });
 
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-output.innerHTML = this.value;
-}
-
-
+      // Initial rendering of projects
+      renderProjects(PROJECT_TYPES.FAVORITE);
     </script>
-  
 
-</body></html>
+    <!-- Update percentage scoll bar -->
+    <script>
+      window.addEventListener("scroll", () => {
+        const scrollBar = document.getElementById("scroll-bar");
+        const totalScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPosition = window.scrollY;
+        const scrollPercentage = (scrollPosition / totalScroll) * 100;
+        scrollBar.style.width = scrollPercentage + "%";
+      });
+    </script>
+
+    <script>
+      jQuery(document).ready(function () {
+        $("#3d").mousemove(function (e) {
+          var rXP = e.pageX - this.offsetLeft - $(this).width() / 2;
+          var rYP = e.pageY - this.offsetTop - $(this).height() / 2;
+          $("#3d").css(
+            "text-shadow",
+            +rYP / 10 + "px " + rXP / 80 + "px rgba(227,6,19,.8), " + rYP / 8 + "px " + rXP / 60 + "px rgba(255,237,0,1), " + rXP / 70 + "px " + rYP / 12 + "px rgba(0,159,227,.7)"
+          );
+        });
+      });
+    </script>
+
+    <!-- Toggle theme script -->
+    <script>
+      var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
+      var themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
+
+      // Change the icons inside the button based on previous settings
+      if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        themeToggleLightIcon.classList.remove("hidden");
+      } else {
+        themeToggleDarkIcon.classList.remove("hidden");
+      }
+
+      var themeToggleBtn = document.getElementById("theme-toggle");
+
+      themeToggleBtn.addEventListener("click", function () {
+        // toggle icons inside button
+        themeToggleDarkIcon.classList.toggle("hidden");
+        themeToggleLightIcon.classList.toggle("hidden");
+
+        // if set via local storage previously
+        if (localStorage.getItem("color-theme")) {
+          if (localStorage.getItem("color-theme") === "light") {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
+          }
+        } else {
+          // if NOT set via local storage previously
+          if (document.documentElement.classList.contains("dark")) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
+          } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
+          }
+        }
+      });
+    </script>
+
+    <!-- <script>
+      var ctx = document.querySelector("canvas").getContext("2d"),
+        dashLen = 150,
+        dashOffset = dashLen,
+        speed = 6,
+        txt = "Caroline Castillo",
+        x = 30,
+        i = 0;
+
+      ctx.font = "50px Comic Sans MS, cursive, TSCu_Comic, sans-serif";
+      ctx.lineWidth = 5;
+      ctx.lineJoin = "round";
+      ctx.globalAlpha = 2 / 3;
+
+      // if set via local storage previously
+      if (localStorage.getItem("color-theme")) {
+        if (localStorage.getItem("color-theme") === "light") {
+          ctx.strokeStyle = "#1f2f90";
+          ctx.fillStyle = "#1f2f90";
+        } else {
+          ctx.strokeStyle = "#d3e0f5";
+          ctx.fillStyle = "#d3e0f5";
+        }
+      }
+
+      (function loop() {
+        ctx.clearRect(x, 0, 60, 150);
+        ctx.setLineDash([dashLen - dashOffset, dashOffset - speed]); // create a long dash mask
+        dashOffset -= speed; // reduce dash length
+        ctx.strokeText(txt[i], x, 90); // stroke letter
+
+        if (dashOffset > 0) requestAnimationFrame(loop); // animate
+        else {
+          ctx.fillText(txt[i], x, 90); // fill final letter
+          dashOffset = dashLen; // prep next char
+          x += ctx.measureText(txt[i++]).width + ctx.lineWidth * Math.random();
+          ctx.setTransform(1, 0, 0, 1, 0, 3 * Math.random()); // random y-delta
+          ctx.rotate(Math.random() * 0.005); // random rotation
+          if (i < txt.length) requestAnimationFrame(loop);
+        }
+      })();
+    </script> -->
+  </body>
+</html>
